@@ -71,14 +71,24 @@ export var Euphony = (function () {
 
             /* 2) Generate pure data code */
             let dataCode = '';
+            
             for (let i = 0; i < data.length; i++) {
-                dataCode += data.charCodeAt(i).toString(16);
+                let nowChar = data.charCodeAt(i).toString(16);
+                let u32 = nowChar;
+
+                for(let j = nowChar.length; j < 8; j++)
+                    u32 = '0' + u32;
+
+                console.log("" + i + " : " + u32);
+                dataCode += u32;
             }
             code += dataCode;
+            console.log("result : " + code);
 
             /* 3) Generate checksum & parity code */
             code += T.makeChecksum(dataCode).toString(16);
             code += T.makeParallelParity(dataCode);
+            
 
             /* 4) Setting Euphony Code */
             T.setInnerCode(code);
